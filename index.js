@@ -34,9 +34,9 @@ import { join } from 'path'
 
     await server.start()
     server.applyMiddleware({ app })
-    await new Promise(resolve => httpServer.listen({ port: 4000 }, resolve))
+    await new Promise(resolve => httpServer.listen({ port: process.env.PORT || 4000 }, resolve))
 
-    console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`)
+    console.log(`🚀 Server ready at http://localhost:${process.env.PORT}${server.graphqlPath}`)
   } catch (error) {
     console['log'](error)
   }
