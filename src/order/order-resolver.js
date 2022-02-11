@@ -53,18 +53,6 @@ export default {
         throw { error }
       }
     },
-    editOrder: async (__, { productId, count }, { db, token }) => {
-      try {
-        if (!token) throw new Error('user unAuthorezation!')
-        let { id, role } = await decrypting(token)
-
-        if (role != 'user') throw new Error('role not user!')
-        let { rows } = await editOrder(db, count, id, productId)
-        return rows
-      } catch (error) {
-        throw { error }
-      }
-    },
     buyAll: async (__, _, { db, token }) => {
       try {
         if (!token) throw new Error('user unAuthorezation!')

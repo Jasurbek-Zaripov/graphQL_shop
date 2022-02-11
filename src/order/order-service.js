@@ -55,33 +55,12 @@ export async function addOrder(db, userId, productId) {
   try {
     return await db.query(
       `
-    INSERT INTO orders(user_id, product_id) 
-    VALUES ($1, $2)
-    RETURNING *
+      INSERT INTO orders (user_id, product_id) VALUES ($1, $2)
+      ON CONFLICT (user_id, product_id) 
+      DO 
+      UPDATE SET count = orders.count + 1 where orders.user_id = $1 and orders.product_id = $2
     `,
       [userId, productId]
-    )
-  } catch (error) {
-    throw { error }
-  }
-}
-
-export async function editOrder(db, count, userId, productId) {
-  try {
-    return await db.query(
-      `
-    UPDATE orders o SET count =
-      CASE
-        WHEN $1 > 0 THEN o.count + 1
-        ELSE o.count
-      END,
-      changed_time = NOW()
-    WHERE 
-      o.user_id = $2 AND
-      o.product_id = $3
-    RETURNING count
-    `,
-      [count, userId, productId]
     )
   } catch (error) {
     throw { error }
@@ -92,7 +71,8 @@ export async function buyAll(db, userId) {
   try {
     return await db.query(
       `
-    UPDATE orders o SET is_paid = true,
+    UPDATE orders o 
+    SET is_paid = true,
       changed_time = NOW()
     WHERE 
       o.user_id = $2 AND

@@ -23,7 +23,6 @@ type Query {
 
 type Mutation {
   addOrder(productId:ID!,):Any
-  editOrder(productId:ID!, count:Int! ):Any
   buyAll:Any
   removeOrder(orderId:ID!):Any
 }
