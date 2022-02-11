@@ -8,7 +8,11 @@ export default {
   Mutation: {
     addProduct: async (__, _, { db, token }) => {
       try {
-        const { createReadStream, filename } = await _.file
+        const { createReadStream, filename, mimetype } = await _.file
+
+        //validate type
+        if (/(jpg)|(png)|(jpeg)/gi.test(mimetype)) throw new Error('invalid type')
+
         const fileLink = Date.now() + filename.replace(/\s/g, '_')
 
         const stream = createReadStream()
@@ -18,7 +22,7 @@ export default {
         await finished(out)
         // end write file
 
-        if (token) throw new Error('user unAuthorezation!')
+        if (!token) throw new Error('user unAuthorezation!')
 
         let { id, role } = await decrypting(token)
 

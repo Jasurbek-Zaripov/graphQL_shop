@@ -10,7 +10,7 @@ export default {
   Mutation: {
     addCategory: async (__, _, { db, token }) => {
       try {
-        if (token) throw new Error('user unAuthorezation!')
+        if (!token) throw new Error('user unAuthorezation!')
 
         let { id, role } = await decrypting(token)
 
@@ -25,7 +25,7 @@ export default {
     },
     addSapCategory: async (__, _, { db, token }) => {
       try {
-        if (token) throw new Error('user unAuthorezation!')
+        if (!token) throw new Error('user unAuthorezation!')
 
         let { id, role } = await decrypting(token)
 
@@ -40,7 +40,7 @@ export default {
     },
     editCategoryName: async (__, _, { db, token }) => {
       try {
-        if (token) throw new Error('user unAuthorezation!')
+        if (!token) throw new Error('user unAuthorezation!')
 
         let { id, role } = await decrypting(token)
 
@@ -60,7 +60,7 @@ export default {
     },
     removeCategory: async (__, _, { db, token }) => {
       try {
-        if (token) throw new Error('user unAuthorezation!')
+        if (!token) throw new Error('user unAuthorezation!')
 
         let { id, role } = await decrypting(token)
 

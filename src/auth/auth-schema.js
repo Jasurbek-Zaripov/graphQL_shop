@@ -1,10 +1,14 @@
 export default `
-scalar Any
+type response {
+  token:String!
+}
+
+
 type Query {
-  login(email:String!, password:String!): Any
+  login(email:String!, password:String!): response
 }
 
 type Mutation {
-  register(username:String!,password:String!,contact:Int!,email:String!): Any
+  register(username:String!,password:String!,contact:Int!,email:String!): response
 }
 `

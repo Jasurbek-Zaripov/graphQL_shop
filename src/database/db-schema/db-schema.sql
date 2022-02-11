@@ -1,9 +1,9 @@
 create TABLE persons (
   id INT GENERATED ALWAYS AS IDENTITY primary key,
   username VARCHAR(50) not null ,
-  password text not null check(password ~ '^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{5,12}$'),
+  password text not null check(password ~* '(?=.*[0-9])(?=.*[a-z])[0-9a-z]{4,}'),
   contact VARCHAR(12) not null UNIQUE check(contact ~ '^\d+$'), --only number
-  email VARCHAR(100) not null UNIQUE check(email ~ '^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$'),
+  email VARCHAR(100) not null UNIQUE check(email ~ '(.*)\@(.*)\.([a-zA-Z]{2,5})$'),
   role VARCHAR(5) not null check(role in ('admin','user')) default 'user' --default role user
 );
 

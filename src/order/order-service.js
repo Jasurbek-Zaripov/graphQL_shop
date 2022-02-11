@@ -6,9 +6,15 @@ export async function getOrders(db, _) {
     return await db.query(
       `
     SELECT 
-      *,
-      TO_CHAR(added_time,'YYYY-MM-DD') added_time
+      o.*,
+      TO_CHAR(o.added_time,'YYYY-MM-DD') added_time,
+      TO_CHAR(o.changed_time,'YYYY-MM-DD') changed_time,
+      per.username  person,
+      prd.name product,
+      concat(o.count, ' pieces ', 'for ',prd.price, ' soums') total_sum
     FROM orders o
+    left join persons per on per.id = o.user_id
+    left join products prd on prd.id = o.product_id
     WHERE
       CASE
         WHEN $3 > 0 THEN o.user_id = $3
@@ -23,7 +29,7 @@ export async function getOrders(db, _) {
         ELSE true
       END AND
       CASE
-        WHEN $7::timestamptz > '01-01-2000'::timestamptz THEN TO_CHAR(added_time,'YYYY-MM-DD') = TO_CHAR($7,'YYYY-MM-DD') 
+        WHEN $7::timestamptz > '01-01-2000'::timestamptz THEN TO_CHAR(o.added_time,'YYYY-MM-DD') = TO_CHAR($7,'YYYY-MM-DD') 
         ELSE true
       END
 

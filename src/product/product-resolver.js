@@ -11,7 +11,7 @@ export default {
   Mutation: {
     editProduct: async (__, _, { db }) => {
       try {
-        if (token) throw new Error('user unAuthorezation!')
+        if (!token) throw new Error('user unAuthorezation!')
 
         let { id, role } = await decrypting(token)
 
@@ -27,7 +27,7 @@ export default {
     },
     removeProduct: async (__, { productId }, { db, token }) => {
       try {
-        if (token) throw new Error('user unAuthorezation!')
+        if (!token) throw new Error('user unAuthorezation!')
 
         let { id, role } = await decrypting(token)
 
