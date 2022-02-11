@@ -121,3 +121,56 @@ export async function removeOrder(db, orderId) {
     throw { error }
   }
 }
+
+//for statistic
+export async function TotalmoneyFun(db, paid) {
+  try {
+    return await db.query(
+      `
+      select
+        o.product_id,
+        count(o.product_id) count,
+        sum(p.price) total_sum
+      from orders o
+      left join products p on o.product_id = p.id        
+      where  o.added_time::timestamptz >= ('now'::timestamptz - '1 month'::interval) 
+        and o.is_paid = $1
+      group by o.product_id
+      order by total_sum desc
+    `,
+      [paid]
+    )
+  } catch (error) {
+    throw { error }
+  }
+}
+
+export async function TheFun(db, product) {
+  try {
+    return await db.query(
+      `
+      select id, name, m.son,price, m.son * price summa 
+        from products pr 
+        join (select product_id, sum(count) son 
+          from orders 
+          group by product_id 
+          having sum(count) = (select sum(count) m 
+            from orders 
+            group by product_id, is_paid 
+            having is_paid = true 
+            order by m 
+            CASE
+              WHEN $1 = 'top' THEN count 
+              END desc,
+            CASE 
+              WHEN $1 = 'lowest' THEN count 
+          END asc
+         limit 1)) m 
+            on m.product_id =  pr.id;
+    `,
+      [product]
+    )
+  } catch (error) {
+    throw { error }
+  }
+}

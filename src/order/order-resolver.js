@@ -1,4 +1,4 @@
-import { addOrder, buyAll, editOrder, getOrders, removeOrder } from './order-service.js'
+import { addOrder, buyAll, editOrder, getOrders, removeOrder, TheFun, TotalmoneyFun } from './order-service.js'
 import { decrypting } from '../service/jwt-service.js'
 
 export default {
@@ -19,7 +19,9 @@ export default {
 
         let { id, role } = await decrypting(token)
 
-        if (role != 'user') throw new Error('role not user!')
+        if (role != 'admin') throw new Error('role not admin!')
+
+        return await TotalmoneyFun(db, paid)
       } catch (error) {
         throw { error }
       }
@@ -30,7 +32,9 @@ export default {
 
         let { id, role } = await decrypting(token)
 
-        if (role != 'user') throw new Error('role not user!')
+        if (role != 'admin') throw new Error('role not admin!')
+
+        return await TheFun(db, product)
       } catch (error) {
         throw { error }
       }
